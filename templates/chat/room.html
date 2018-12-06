@@ -1,0 +1,29 @@
+{% extends "homeApp/navbar.html" %}
+{% block header %}
+{% endblock %}
+{% block content %}
+{% load staticfiles %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'homeApp/css/popchat.css' %}">
+
+
+
+<div class="col-sm-3 col-sm-offset-4 frame">
+    <ul id="specialUL"></ul>
+    <div>
+        <div class="msj-rta macro">
+            <div class="text text-r" style="background:whitesmoke !important">
+                <input class="mytext" id="chat-message-input" type="text" size="100" placeholder="Type a message"/>
+{#                <input class="mytext" id="chat-message-input" type="text" size="100" placeholder="Type a message"/><br/>#}
+{#                <input id="chat-message-submit" type="button" value="Send"/>#}
+            </div>
+
+        </div>
+        <div style="padding:10px;">
+            <span id="chat-message-submit" type="button" value="Send" type="button" class="glyphicon glyphicon-share-alt"></span>
+        </div>
+    </div>
+</div>
+<script>var roomName=({{ room_name_json }});</script>
+<script type="text/javascript" src="{% static 'homeApp/javascript/popchat.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+{% if request.session.lang == "he" %}
+    <html dir="rtl">
+    <html lang="he">
+{% endif %}
+{% load i18n %}
+<head>
+    {% load staticfiles %}
+    <title>{% trans "Pop Chat" %}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">-->
+
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'homeApp/images/temp.ico' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'homeApp/css/general.css' %}">
+    <script type="text/javascript" src="{% static 'homeApp/javascript/commonUtils.js' %}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.3.7/dist/css/bootstrap.min.css' %}">
+{#    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-4.0.0-beta.2/dist/css/bootstrap.min.css' %}">#}
+    <!--<link href="{% static 'bootstrap-3.3.7/dist/css/animate.min.css' %}" rel="stylesheet">-->
+    <!--<link href="{% static 'bootstrap-3.3.7/dist/css/bootstrap-dropdownhover.min.css' %}" rel="stylesheet">-->
+
+    <script src="{% static 'bootstrap-3.3.7/dist/js/bootstrap.min.js' %}"></script>
+
+    <!--<script src="{% static 'bootstrap-3.3.7/dist/js/bootstrap-dropdownhover.min.js' %}"></script>-->
+
+    {% block header %}{% endblock %}
+</head>
+<body>
+<!--TOP NAVBAR-->
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <img class="navbar-brand" rel="shortcut icon" type="image/x-icon"  src="{% static 'homeApp/images/temp.ico' %}"></img>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><a href="#">{% trans "Sales" %}</a></li>
+        <li><a href="#">{% trans "Rent" %}</a></li>
+        <li><a href="#">{% trans "Trade" %}</a></li>
+        <li><a href="#">{% trans "Agent" %}</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+
+{#        <li class="dropdown">#}
+{#            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{request.session.lang}}<span class="caret"></span></a>#}
+{#        </li>#}
+        <li><a href="#SignIn">{% trans "Sign in" %}</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+{% block content %}{% endblock %}
+
+
+<!--BOTTOM NAVBAR-->
+{#<div>#}
+{#    <img src="{% static 'homeApp/images/stop.png' %}" alt="failed to include stop image" />#}
+{#</div>#}
+{#<nav class="navbar fixed-bottom navbar-light bg-light">#}
+{#  <a class="navbar-brand" href="#">Fixed bottom</a>#}
+{#</nav>#}
+</body>
+</html>

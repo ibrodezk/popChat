@@ -1,0 +1,67 @@
+{% extends "homeApp/navbar.html" %}
+{% load crispy_forms_tags %}
+{% load common_tags %}
+{% block header %}
+{% endblock %}
+{% block content %}
+
+<div id='form'>
+<div class="row">
+<div class="col-md-12">
+
+<form action="" method="POST" id="commentform">
+{% csrf_token %}
+<div id="comment-name" class="form-row">
+<input type = "text" placeholder = "" name = "dname"  id = "text" >
+<a href="#"><input type="submit" name="dsubmit" id="commentSubmit" value="Submit Comment"></a>
+</div>
+</form>
+
+</div>
+</div>
+</div>
+</div>
+
+<form action="" method="post">
+    {% csrf_token %}
+
+
+
+    <input type="submit" value="Submit" />
+</form>
+<div class="detailBox">
+    <div class="titleBox">
+      <label>Comment Box</label>
+        <button type="button" class="close" aria-hidden="true">&times;</button>
+    </div>
+    <div class="commentBox">
+
+        <p class="taskDescription">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+    </div>
+    <div class="actionBox">
+        <ul class="commentList" , id="commentList">
+          <li>
+                <div class="commenterImage">
+                  <img src="http://placekitten.com/40/40" />
+                </div>
+                <div class="commentText">
+                    <p class="">Hello this is a test comment.</p> <span class="date sub-text">on March 5th, 2014</span>
+
+                </div>
+            </li>
+        </ul>
+        <form class="form-inline" role="form">
+            <div class="form-group">
+                <input class="form-control" type="text" placeholder="Your comments" />
+            </div>
+            <div class="form-group">
+                <button class="btn btn-default">Add</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+// Example starter JavaScript for disabling form submissions if there are invalid fields
+
+</script>
+{% endblock %}

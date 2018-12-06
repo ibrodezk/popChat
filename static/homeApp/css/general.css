@@ -1,0 +1,150 @@
+body {margin:0;}
+/*
+* navbar
+*
+*/
+
+#map {
+    height: 400px;
+    width: 100%;
+}
+@import url(//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css);
+
+
+.detailBox {
+    width:320px;
+    border:1px solid #bbb;
+    margin:50px;
+}
+.titleBox {
+    background-color:#fdfdfd;
+    padding:10px;
+}
+.titleBox label{
+  color:#444;
+  margin:0;
+  display:inline-block;
+}
+
+.commentBox {
+    padding:10px;
+    border-top:1px dotted #bbb;
+}
+.commentBox .form-group:first-child, .actionBox .form-group:first-child {
+    width:80%;
+}
+.commentBox .form-group:nth-child(2), .actionBox .form-group:nth-child(2) {
+    width:18%;
+}
+.actionBox .form-group * {
+    width:100%;
+}
+.taskDescription {
+    margin-top:10px;
+}
+.commentList {
+    padding:0;
+    list-style:none;
+    max-height:200px;
+    overflow:auto;
+}
+.commentList li {
+    margin:0;
+    margin-top:10px;
+}
+.commentList li > div {
+    display:table-cell;
+}
+.commenterImage {
+    width:30px;
+    margin-right:5px;
+    height:100%;
+    float:left;
+}
+.commenterImage img {
+    width:100%;
+    border-radius:50%;
+}
+.commentText p {
+    margin:0;
+}
+.sub-text {
+    color:#aaa;
+    font-family:verdana;
+    font-size:11px;
+}
+.actionBox {
+    border-top:1px dotted #bbb;
+    padding:10px;
+}
+/*.topnav {*/
+  /*overflow: hidden;*/
+  /*background-color: #0091FF;*/
+/*}*/
+
+/*.topnav a {*/
+  /*float: left;*/
+  /*display: block;*/
+  /*color: #f2f2f2;*/
+  /*text-align: center;*/
+  /*padding: 14px 16px;*/
+  /*text-decoration: none;*/
+  /*font-size: 17px;*/
+/*}*/
+
+/*.topnav a:hover {*/
+  /*background-color: #000DBD;*/
+  /*color: black;*/
+/*}*/
+
+/*.topnav a.active {*/
+    /*background-color: #4CAF50;*/
+    /*color: white;*/
+/*}*/
+
+/*!**/
+/** dropdown*/
+/***/
+/**!*/
+
+/*.dropdown {*/
+    /*float: left;*/
+    /*overflow: hidden;*/
+/*}*/
+
+/*.dropdown .dropbtn {*/
+    /*border: inherit;*/
+    /*outline: inherit;*/
+    /*color: white;*/
+    /*padding: 14px 16px;*/
+    /*background-color: inherit;*/
+    /*font-size: 17px;*/
+/*}*/
+
+/*.navbar a:hover, .dropdown:hover .dropbtn {*/
+    /*background-color: red;*/
+/*}*/
+
+/*.dropdown-content {*/
+    /*display: none;*/
+    /*position: absolute;*/
+    /*background-color: #f9f9f9;*/
+    /*min-width: 160px;*/
+    /*box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);*/
+    /*z-index: 1;*/
+/*}*/
+
+/*.dropdown-content a {*/
+    /*float: none;*/
+    /*color: inherit;*/
+    /*padding: 12px 16px;*/
+    /*text-decoration: none;*/
+    /*display: block;*/
+    /*text-align: left;*/
+/*}*/
+
+/*.dropdown:hover .dropdown-content{*/
+    /*display: block;*/
+    /*margin-top: 0;*/
+/*}*/
+
