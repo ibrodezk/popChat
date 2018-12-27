@@ -12,33 +12,36 @@ function formatAMPM(date) {
     return strTime;
 }
 
-function upvoteFunction(who){
-    // console.log(Object.getOwnPropertyNames(who));
+function createChatMsg(msg, id){
+    var date = formatAMPM(new Date());
+    var avatar = me.avatar;
+    var $li = $("<li>", {style: "100%"});
+    var $msj_macro = $("<div>", {class: "msj macro"});
+    var $avatar = $("<div>", {class: "avatar"}).html($("<img>", { class: "img-circle", style: "width:100%;", src: avatar}));
+    var $textObj = $("<div>", {class: "text text-l"});
+    var $msgObj = $("<p>", {text: msg});
+    var $dateObj = $("<p>").append($("<small>", {text: date}));
+    var $updateBut = $("<button>", {type: "button", text: "like!"}).click(upvoteFunction);
+    var $hiddenId = $("<input>", {class: "msgId",id: "msgId", name: "msgId", type: "hidden", value: id, text: id});
+    $li.append($msj_macro);
+    $textObj.append($msgObj).append($dateObj);
+    $msj_macro.append($avatar).append($textObj).append($hiddenId).append($updateBut);
+    return $li;
 }
 
+
 //-- No use time. It is a javaScript effect.
-function insertChat(who, text, time){
+function insertChat(who, text, id, time){
     if (time === undefined){
         time = 0;
     }
     console.debug("insertChat");
-    console.debug(text.msg);
-    var control = "";
-    var date = formatAMPM(new Date());
-    var avatar = me.avatar;
-    control = '<li style="width:100%">' +
-            '<div class="msj macro">' +
-            '<div class="avatar"><img class="img-circle" style="width:100%;" src="' + avatar + '" /></div>' +
-                '<div class="text text-l">' +
-                    '<p>' + text.msg + '</p>' +
-                    '<p><small>' + date + '</small></p>' +
-                '</div>' +
-                '<button type="button" onclick=upvoteFunction();>Upvote!</button>' +
-            '</div>' +
-        '</li>';
+    console.debug("msg:" + text);
+    console.debug("id:" + id);
+    var $chatMsgObj = createChatMsg(text, id);
     setTimeout(
         function(){
-            $("#specialUL").append(control).scrollTop($("#specialUL").prop('scrollHeight'));
+            $("#specialUL").append($chatMsgObj);
         }, time);
 
 }
@@ -70,19 +73,35 @@ var chatSocket = new WebSocket(
     'ws://' + window.location.host +
     '/ws/chat/' + roomName + '/');
 
+var chatSocket = new WebSocket(
+    'ws://' + window.location.host +
+    '/ws/chat/' + 'personal token' + '/');
+
 chatSocket.onmessage = function(e) {
-
-
     var data = JSON.parse(e.data);
-    console.debug("onmessage" + data['popMessage'].toString());
-    var message = data['popMessage']['msg'];
+    console.debug("onmessage" + data);
 // {#        document.querySelector('#chat-log').value += (message + '\n');#}
-    insertChat("me", message, 0);
+    insertChat("me", data['popMessage']['msg'], data['popMessage']['id'], 0);
 };
 
 chatSocket.onclose = function(e) {
-    console.error('Chat socket closed unexpectedly');
+    console.log(e.reason);
+    console.error('Chat socket closed unexpectedly:' + e.reason);
 };
+
+function upvoteFunction(){
+    var id = $(this).parent().find('#msgId').val();
+    chatSocket.send(JSON.stringify({
+        'upvote': 'test',
+        'id': id
+    }));
+}
+
+function refreshFunction(){
+    chatSocket.send(JSON.stringify({
+        'refresh': 'test'
+    }));
+}
 
 document.querySelector('.mytext').focus();
 document.querySelector('.mytext').onkeyup = function(e) {
@@ -91,6 +110,7 @@ document.querySelector('.mytext').onkeyup = function(e) {
         document.querySelector('#chat-message-submit').click();
     }
 };
+
 $(".mytext").on("keydown", function(e){
     console.debug("onkeydown");
     if (e.which == 13){

@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'chat',
 #packages
     'channels',
+#modelx
+    'store',
 ]
 
 ASGI_APPLICATION = 'popChat.routing.application'
@@ -56,6 +58,19 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
