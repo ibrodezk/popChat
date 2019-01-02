@@ -18,6 +18,8 @@ from django.contrib import admin
 from django.conf.urls import include, url
 from . import views
 urlpatterns = [
-    url(r'^(?P<room_name>[^/]+)/$', views.room, name='room'),
+    url(r'^room/(?P<room_name>[^/]+)/$', views.room, name='room'),
     url(r'^$', views.index, name='index'),
+    url(r'^login/$', views.loginTest, name='loginTest'),
+    url(r'^twitchInput/', views.twitchInput, name='twitchInput'),
 ]

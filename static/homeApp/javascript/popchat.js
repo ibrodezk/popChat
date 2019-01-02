@@ -71,11 +71,11 @@ function setRoomName(room){
 
 var chatSocket = new WebSocket(
     'ws://' + window.location.host +
-    '/ws/chat/' + roomName + '/');
+    '/ws/chat/room/' + roomName + '/');
 
-var chatSocket = new WebSocket(
-    'ws://' + window.location.host +
-    '/ws/chat/' + 'personal token' + '/');
+// var chatSocket = new WebSocket(
+//     'ws://' + window.location.host +
+//     '/ws/chat/' + 'personal token' + '/');
 
 chatSocket.onmessage = function(e) {
     var data = JSON.parse(e.data);

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'social_django',
 #apps
     'chat',
 #packages
@@ -80,9 +81,33 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'popChat.urls'
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.github.GithubOAuth2',
+    'social_core.backends.twitter.TwitterOAuth',
+    'social_core.backends.facebook.FacebookOAuth2',
+    'social_core.backends.twitch.TwitchOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.user.create_user',
+    'chat.pipeline.save_profile',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+    'social_core.pipeline.social_auth.associate_by_email',
+
+)
 
 TEMPLATES = [
     {
@@ -95,6 +120,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',  # <--
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -158,5 +185,19 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR , 'static'),
-
 )
+SOCIAL_AUTH_NEW_ASSOCIATION_REDIRECT_URL = 'http://localhost:8000/chat/twitchInput/'
+LOGIN_REDIRECT_URL = 'http://localhost:8000/chat/twitchInput/'
+LOGIN_REDIRECT_URL='http://localhost:8000/chat/twitchInput/'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = 'http://localhost:8000/chat/twitchInput/'
+SOCIAL_AUTH_NEW_USER_REDIRECT_URL = 'http://localhost:8000/chat/twitchInput/'
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/chat/twitchInput/?loginError'
+SOCIAL_AUTH_INACTIVE_USER_URL = '/login/inactive/'
+
+SOCIAL_AUTH_TWITCH_KEY = 'bnkxa3ef9rgetlbxsymp46xwslqrkr'
+SOCIAL_AUTH_TWITCH_SECRET = 'kmdcvp05qttl5qzz8dfgnwqtkxhl6g'
+
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
+# SOCIAL_AUTH_USER_MODEL = 'chat.User'
+SOCIAL_AUTH_TWITCH_AUTH_EXTRA_ARGUMENTS = { 'display': 'popup' }

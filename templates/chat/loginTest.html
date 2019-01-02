@@ -1,0 +1,46 @@
+{% extends "homeApp/navbar.html" %}
+{% block header %}
+{% endblock %}
+{% block content %}
+{% load staticfiles %}
+    <p>
+    TEST
+    </p>
+  {% if user.is_authenticated %}
+    <div class="user-details">
+      You are logged in as <code>{{ user.username }}</code>!
+    </div>
+  {% endif %}
+    You are logged in as <code>{{ social_core.pipeline.user.get_username }}</code>!
+    <script>
+    function miniReport(){
+     var client_account_number = localStorage.getItem('numb');
+     $.ajax({
+        url:'https://api.twitch.tv/kraken/oauth2/authorize',
+        timeout:30000,
+        type: "GET",
+        headers: {
+            'Client-ID': 'bnkxa3ef9rgetlbxsymp46xwslqrkr'
+       },
+        success: function(msg){
+            if (msg.ws_resultat.result_ok==true)
+            {
+                alert('success!');
+                console.log(data);
+            }
+        },
+            error: function(jqXHR, textStatus)
+          {
+            alert('error!');
+          }
+    });
+
+}
+{#miniReport();#}
+
+    </script>
+
+    <a href="https://api.twitch.tv/kraken/oauth2/authorize?client_id=bnkxa3ef9rgetlbxsymp46xwslqrkr&response_type=code&redirect_uri=http://localhost:8000/chat/twitchInput/">Connect With Twitch!</a>
+      <a href="{% url 'social:begin' 'twitch' %}?next=http://localhost:8000/chat/twitchInput/">Login with twitch social!</a><br>
+    <button onclick="miniReport()">asd</button>
+{% endblock %}
