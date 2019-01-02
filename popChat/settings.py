@@ -181,7 +181,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
-
+# STATIC_ROOT= os.path.join(BASE_DIR , 'static')
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR , 'static'),
@@ -199,5 +199,9 @@ SOCIAL_AUTH_TWITCH_SECRET = 'kmdcvp05qttl5qzz8dfgnwqtkxhl6g'
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
-# SOCIAL_AUTH_USER_MODEL = 'chat.User'
+
 SOCIAL_AUTH_TWITCH_AUTH_EXTRA_ARGUMENTS = { 'display': 'popup' }
+
+# to change model
+# SOCIAL_AUTH_USER_MODEL = 'chat.User'
+# AUTH_USER_MODEL = 'chat.User'

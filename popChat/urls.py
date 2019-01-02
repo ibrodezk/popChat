@@ -25,6 +25,6 @@ urlpatterns = [
     url(r'^chat/', include('chat.urls')),
     url(r'accounts/', include('django.contrib.auth.urls')),
     url(r'^oauth/', include('social_django.urls', namespace='social')),
-    url('', include('social_django.urls', namespace='social')),
+    # url('', include('social_django.urls', namespace='social')),
 ]
 

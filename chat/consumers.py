@@ -22,7 +22,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         # self.user = self.scope['url_route']['kwargs']['user']
         self.user = self.scope["user"]
         print(self.user)
-        if (self.user.is_authenticated()):
+        if (self.user.username != ""):
             username_group = 'user_%s' % self.user.username
             await self.channel_layer.group_add(
                 username_group,
