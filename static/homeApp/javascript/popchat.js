@@ -1,6 +1,6 @@
 var me = {};
 me.avatar = "https://lh6.googleusercontent.com/-lr2nyjhhjXw/AAAAAAAAAAI/AAAAAAAARmE/MdtfUmC0M4s/photo.jpg?sz=48";
-
+var RGB_MAX = 255;
 function formatAMPM(date) {
     var hours = date.getHours();
     var minutes = date.getMinutes();
@@ -12,11 +12,21 @@ function formatAMPM(date) {
     return strTime;
 }
 
-function createChatMsg(msg, id){
+function sortMaxMsg(dictArr){
+    dictArr.sort(function(msg1,msg2){
+        return msg2.score - msg1.score ;
+    })
+    var max = Math.max.apply(Math, dictArr.map(function(msg) { return msg.score; console.log(msg.score);}))
+    return max > 0 ? max : 0;
+}
+
+
+function createChatMsg(msg, id, color){
     var date = formatAMPM(new Date());
     var avatar = me.avatar;
     var $li = $("<li>", {style: "100%"});
     var $msj_macro = $("<div>", {class: "msj macro"});
+    $msj_macro.css("background-color","rgb(" + RGB_MAX + "," + color + "," + color + ")");
     var $avatar = $("<div>", {class: "avatar"}).html($("<img>", { class: "img-circle", style: "width:100%;", src: avatar}));
     var $textObj = $("<div>", {class: "text text-l"});
     var $msgObj = $("<p>", {text: msg});
@@ -31,14 +41,15 @@ function createChatMsg(msg, id){
 
 
 //-- No use time. It is a javaScript effect.
-function insertChat(who, text, id, time){
+function insertChat(who, text, id, color, time){
+//color:"rgb(" + score + ",0,0)"
     if (time === undefined){
         time = 0;
     }
     console.debug("insertChat");
     console.debug("msg:" + text);
     console.debug("id:" + id);
-    var $chatMsgObj = createChatMsg(text, id);
+    var $chatMsgObj = createChatMsg(text, id, color);
     setTimeout(
         function(){
             $("#specialUL").append($chatMsgObj);
@@ -79,9 +90,23 @@ var chatSocket = new WebSocket(
 
 chatSocket.onmessage = function(e) {
     var data = JSON.parse(e.data);
-    console.debug("onmessage" + data);
+    console.debug("onmessage" + e.data);
+    console.debug("onmessage" + data['type']);
 // {#        document.querySelector('#chat-log').value += (message + '\n');#}
-    insertChat("me", data['popMessage']['msg'], data['popMessage']['id'], 0);
+    if (data['type'] === "create_message")
+        insertChat("me", data['popMessage']['msg'], data['popMessage']['id'], RGB_MAX, 0);
+    if (data['type'] === "refresh_message") {
+        var dictArr = data["messageDict"]["msgs"];
+        var maxScore = sortMaxMsg(dictArr);
+        console.log("max:" + maxScore)
+        resetChat();
+        for (var i = 0; i < dictArr.length; i++) {
+            var color = parseInt(( (maxScore - dictArr[i].score) / maxScore) * RGB_MAX);
+            console.log("color:" + color);
+            insertChat("me", dictArr[i]["msg"], dictArr[i]["id"], color, 0);
+        }
+        console.log(dictArr)
+    }
 };
 
 chatSocket.onclose = function(e) {

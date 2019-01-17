@@ -8,13 +8,6 @@ class AppMsg:
     invalid = 0
     id = 0
     # lock = Lock()
-
-    def __init__(self):
-        Exception('invalid constructor appMsg')
-
-    def __init__(self, jsonDict):
-        self._decodeJson(jsonDict)
-
     def __init__(self, msg, score):
         self.msg = msg
         self.score = score
@@ -24,9 +17,7 @@ class AppMsg:
         return not self.invalid
 
     def setScore(self, score):
-        # self.lock.acquire(True)
         self.score = score
-        # self.lock.release(False)
 
     def incScore(self):
         # self.lock.acquire(True)
@@ -50,11 +41,11 @@ class AppMsg:
             'msg': self.msg,
             'score': self.score,
             'id': self.id,
-            '__class__': 'appMsg'
+            '__class__': 'AppMsg'
         }
 
     def _decodeJson(self, jsonDict):
-        if jsonDict['__class__'] != 'appMsg':
+        if jsonDict['__class__'] != 'AppMsg':
             self.invalid = 1
         self.msg = jsonDict['msg']
         self.score = jsonDict['score']

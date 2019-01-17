@@ -9,6 +9,7 @@ from channels.db import database_sync_to_async
 from django.contrib.auth.models import User
 from common.AppMsgManager import AppMsgManager
 from common.AppMsg import AppMsg
+# from channels import Group
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -21,11 +22,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.room_group_name = 'chat_%s' % self.room_name
         # self.user = self.scope['url_route']['kwargs']['user']
         self.user = self.scope["user"]
-        print(self.user)
         if (self.user.username != ""):
-            username_group = 'user_%s' % self.user.username
+            self.username_group = 'user_%s' % self.user.username
             await self.channel_layer.group_add(
-                username_group,
+                self.username_group,
                 self.channel_name
             )
         # Join room group
@@ -47,6 +47,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def createPopMessage(self, text_data_json):
         print("createPopMessage")
         popMessage = AppMsg(text_data_json['message'], 0)
+        self.msgManager.addMsg(popMessage)
         print(str(popMessage))
         # Send message to room group
         await self.channel_layer.group_send(
@@ -63,9 +64,34 @@ class ChatConsumer(AsyncWebsocketConsumer):
         pass
 
     async def refreshMessage(self, text_data_json):
+        print("refresh message" + self.username_group)
+        print(self.username_group)
+        await self.channel_layer.group_send(
+            self.username_group,
+            {
+                'type': 'refresh_message',
+                'messageDict': self.msgManager.prepareEncode()
+            }
+        )
+        # Group("user-{}".format(self.username_group)).send({
+        #     "text": json.dumps({
+        #         'type': 'refresh_message',
+        #         'messageDict': self.msgManager.prepareEncode()
+        #     })
+        # })
         #self.msgManager.upvoteMsg()
         # self.channel_layer.
         pass
+
+    async def refresh_message(self, event):
+        print("refresh_message")
+        dict = event['messageDict']
+        print(dict)
+        # Send message to WebSocket
+        await self.send(text_data=json.dumps({
+            'messageDict': dict,
+            'type': "refresh_message"
+        }))
 
     # Receive message from WebSocket
     async def receive(self, text_data):
@@ -84,11 +110,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
     # Receive  message from room group
     async def chat_message(self, event):
         print('chat_message')
-        text = event['popMessage']['msg']
-        popMessage = AppMsg(text, 0)
-        self.msgManager.addMsg(popMessage)
+        popMessageJson = event['popMessage']
+
         # Send message to WebSocket
-        print(popMessage)
         await self.send(text_data=json.dumps({
-            'popMessage': popMessage.prepareEncode(),
+            'type': 'create_message',
+            'popMessage': popMessageJson,
         }))
