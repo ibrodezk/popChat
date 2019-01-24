@@ -49,7 +49,7 @@ class ChatTests(ChannelsLiveServerTestCase):
     def test_stress(self):
         try:
             start = 4
-            end = 6
+            end = 5
             rooms = [('room_' + str(x)) for x in range(start, end)]
             for ind in range(start, end):
                 self._enter_chat_room('room_5')
@@ -71,50 +71,50 @@ class ChatTests(ChannelsLiveServerTestCase):
             time.sleep(8)
             self._close_all_new_windows()
 
-    # def test_when_chat_message_posted_then_seen_by_everyone_in_same_room(self):
-    #     try:
-    #         self._enter_chat_room('room_0')
-    #
-    #         self._open_new_window()
-    #         self._enter_chat_room('room_0')
-    #         time.sleep(1)
-    #         self._switch_to_window(0)
-    #         self._post_message('hello')
-    #         WebDriverWait(self.driver, 2).until(lambda _:
-    #             'hello' in self._chat_log_value,
-    #             'Message was not received by window 1 from window 1')
-    #         self._switch_to_window(1)
-    #         WebDriverWait(self.driver, 2).until(lambda _:
-    #             'hello' in self._chat_log_value,
-    #             'Message was not received by window 2 from window 1')
-    #     finally:
-    #         # time.sleep(10)
-    #         self._close_all_new_windows()
-    #
-    # def test_when_chat_message_posted_then_not_seen_by_anyone_in_different_room(self):
-    #     try:
-    #         self._enter_chat_room('room_1')
-    #
-    #         self._open_new_window()
-    #         self._enter_chat_room('room_2')
-    #         time.sleep(1)
-    #         self._switch_to_window(0)
-    #         self._post_message('hello')
-    #         WebDriverWait(self.driver, 2).until(lambda _:
-    #             'hello' in self._chat_log_value,
-    #             'Message was not received by window 1 from window 1')
-    #
-    #         self._switch_to_window(1)
-    #         self._post_message('world')
-    #
-    #         WebDriverWait(self.driver, 2).until(lambda _:
-    #             'world' in self._chat_log_value,
-    #             'Message was not received by window 2 from window 2')
-    #         self.assertTrue('hello' not in self._chat_log_value,
-    #             'Message was improperly received by window 2 from window 1')
-    #     finally:
-    #         # time.sleep(10)
-    #         self._close_all_new_windows()
+    def test_when_chat_message_posted_then_seen_by_everyone_in_same_room(self):
+        try:
+            self._enter_chat_room('room_0')
+
+            self._open_new_window()
+            self._enter_chat_room('room_0')
+            time.sleep(1)
+            self._switch_to_window(0)
+            self._post_message('hello')
+            WebDriverWait(self.driver, 2).until(lambda _:
+                'hello' in self._chat_log_value,
+                'Message was not received by window 1 from window 1')
+            self._switch_to_window(1)
+            WebDriverWait(self.driver, 2).until(lambda _:
+                'hello' in self._chat_log_value,
+                'Message was not received by window 2 from window 1')
+        finally:
+            # time.sleep(10)
+            self._close_all_new_windows()
+
+    def test_when_chat_message_posted_then_not_seen_by_anyone_in_different_room(self):
+        try:
+            self._enter_chat_room('room_1')
+
+            self._open_new_window()
+            self._enter_chat_room('room_2')
+            time.sleep(1)
+            self._switch_to_window(0)
+            self._post_message('hello')
+            WebDriverWait(self.driver, 2).until(lambda _:
+                'hello' in self._chat_log_value,
+                'Message was not received by window 1 from window 1')
+
+            self._switch_to_window(1)
+            self._post_message('world')
+
+            WebDriverWait(self.driver, 2).until(lambda _:
+                'world' in self._chat_log_value,
+                'Message was not received by window 2 from window 2')
+            self.assertTrue('hello' not in self._chat_log_value,
+                'Message was improperly received by window 2 from window 1')
+        finally:
+            # time.sleep(10)
+            self._close_all_new_windows()
 
     # === Utility ===
 

@@ -1,12 +1,36 @@
 {% extends "homeApp/navbar.html" %}
+{% load staticfiles %}
 {% block header %}
 {% endblock %}
 {% block content %}
-{% load staticfiles %}
+
     <p>
-    TEST
+    TEST2
     </p>
+<a class="loginModalLink"
+    href="{% url 'social:begin' 'linkedin-oauth2' %}"
+    data-target="#loginModal" data-toggle="modal">
+    <button type="button" class="btn btn-success btn-xs">
+    <span class="glyphicon glyphicon-user"></span>
+    Sign In
+    </button>
+</a>
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">One fine body...
+                <div class="inline-group">
+                    <a href="{% url 'social:begin' 'twitch' %}?next=http://localhost:8000/chat/twitchInput/">
+                        Login with twitch social!
+                    </a>
+                </div>
+            </div>
+        </div> <!-- ./modal-content -->
+    </div> <!-- ./modal-dialog -->
+</div>
+{{ user.is_authenticated }}
   {% if user.is_authenticated %}
+
     <div class="user-details">
       You are logged in as <code>{{ user.username }}</code>!
     </div>

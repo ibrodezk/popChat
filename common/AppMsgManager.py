@@ -10,6 +10,8 @@ class AppMsgManager:
     def __init__(self):
         pass
 
+
+
     def addMsg(self, msg):
         # self.lock.acquire(True)
         self.msgDict[msg.getUniqueId()] = msg
@@ -20,8 +22,8 @@ class AppMsgManager:
         del self.msgDict[msg.getUniqueId()]
         # self.lock.release()
 
-    def upvoteMsg(self, id):
-        self.msgDict[id].incScore()
+    def upvoteMsg(self, id, userId):
+        self.msgDict[id].incScore(userId)
 
     def debugPrint(self):
         for val in self.msgDict.values():

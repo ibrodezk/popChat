@@ -1,17 +1,24 @@
 import uuid
 from asyncio import Lock
 
+from common.timeUtils import getCurrentMili
+
 
 class AppMsg:
     msg = ""
     score = 0
     invalid = 0
     id = 0
+    userId = 0
+    likeList = []
     # lock = Lock()
-    def __init__(self, msg, score):
+    def __init__(self, msg, score, userId):
         self.msg = msg
         self.score = score
         self.id = str(uuid.uuid4())
+        self.userId = userId
+        self.likeList.append(userId)
+        self.time = getCurrentMili()
 
     def validate(self):
         return not self.invalid
@@ -19,9 +26,11 @@ class AppMsg:
     def setScore(self, score):
         self.score = score
 
-    def incScore(self):
+    def incScore(self, userId):
         # self.lock.acquire(True)
-        self.score += 1
+        if(userId not in self.likeList):
+            self.score += 1
+            self.likeList.append(self.userId)
         # self.lock.release(False)
 
     def setMsg(self, msg):
@@ -36,11 +45,16 @@ class AppMsg:
     def getMsg(self):
         return self.msg
 
+    def getUserId(self):
+        return self.userId
+
     def prepareEncode(self):
         return {
             'msg': self.msg,
             'score': self.score,
             'id': self.id,
+            'time': self.time,
+            'user_id': self.userId,
             '__class__': 'AppMsg'
         }
 
@@ -50,3 +64,5 @@ class AppMsg:
         self.msg = jsonDict['msg']
         self.score = jsonDict['score']
         self.id = jsonDict['id']
+        self.time = jsonDict['time']
+        self.userId = jsonDict['user_id']

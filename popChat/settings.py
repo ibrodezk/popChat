@@ -201,7 +201,7 @@ SOCIAL_AUTH_TWITCH_SECRET = 'kmdcvp05qttl5qzz8dfgnwqtkxhl6g'
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
-
+LOGOUT_REDIRECT_URL='/'
 SOCIAL_AUTH_TWITCH_AUTH_EXTRA_ARGUMENTS = { 'display': 'popup' }
 
 # to change model

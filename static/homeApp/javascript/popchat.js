@@ -1,6 +1,7 @@
 var me = {};
 me.avatar = "https://lh6.googleusercontent.com/-lr2nyjhhjXw/AAAAAAAAAAI/AAAAAAAARmE/MdtfUmC0M4s/photo.jpg?sz=48";
 var RGB_MAX = 255;
+var myTimer = setInterval(function () {document.getElementById("refreshButton").click();}, 10000);
 function formatAMPM(date) {
     var hours = date.getHours();
     var minutes = date.getMinutes();
@@ -123,28 +124,36 @@ function upvoteFunction(){
 }
 
 function refreshFunction(){
+    clearInterval(myTimer);
+    myTimer = setInterval(refreshFunction, 10000);
     chatSocket.send(JSON.stringify({
         'refresh': 'test'
     }));
 }
+chatSocket.onopen = function(e){
+    refreshFunction();
+}
+if(document.querySelector('.mytext')){
+    document.querySelector('.mytext').focus();
+    document.querySelector('.mytext').onkeyup = function(e) {
+        console.debug("onkeyup");
+        if (e.keyCode === 13) {  // enter, return
+            document.querySelector('#chat-message-submit').click();
+        }
+    };
 
-document.querySelector('.mytext').focus();
-document.querySelector('.mytext').onkeyup = function(e) {
-    console.debug("onkeyup");
-    if (e.keyCode === 13) {  // enter, return
-        document.querySelector('#chat-message-submit').click();
+    $(".mytext").on("keydown", function(e){
+        console.debug("onkeydown");
+        if (e.which == 13){
+            var messageInputDom = document.querySelector('.mytext');
+            var message = messageInputDom.value;
+            chatSocket.send(JSON.stringify({
+                'message': message
+            }));
+    //            print("test:"+message);#}
+            messageInputDom.value = '';
+        }
     }
-};
+    );
+}
 
-$(".mytext").on("keydown", function(e){
-    console.debug("onkeydown");
-    if (e.which == 13){
-        var messageInputDom = document.querySelector('.mytext');
-        var message = messageInputDom.value;
-        chatSocket.send(JSON.stringify({
-            'message': message
-        }));
-//            print("test:"+message);#}
-        messageInputDom.value = '';
-    }
-});

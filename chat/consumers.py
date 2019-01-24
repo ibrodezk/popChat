@@ -1,3 +1,5 @@
+import uuid
+
 from asgiref.sync import async_to_sync
 import asyncio
 from channels.generic.websocket import AsyncWebsocketConsumer
@@ -16,25 +18,31 @@ class ChatConsumer(AsyncWebsocketConsumer):
     room_name = ''
     room_group_name = ''
     msgManager = AppMsgManager()
-
+    username_group = ""
+    id = -1
     async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = 'chat_%s' % self.room_name
         # self.user = self.scope['url_route']['kwargs']['user']
         self.user = self.scope["user"]
-        if (self.user.username != ""):
+        print(self.user)
+        if (self.user.username == ""):
+            self.scope["session"]["uniqKey"] = str(uuid.uuid4())
+            self.id = self.scope["session"]["uniqKey"]
+            self.scope["session"].save()
+            self.username_group = self.scope["session"]["uniqKey"]
+        else:
+            self.id = self.user.id
             self.username_group = 'user_%s' % self.user.username
-            await self.channel_layer.group_add(
-                self.username_group,
-                self.channel_name
-            )
+        await self.channel_layer.group_add(
+            self.username_group,
+            self.channel_name
+        )
         # Join room group
         await self.channel_layer.group_add(
             self.room_group_name,
             self.channel_name
         )
-
-
         await self.accept()
 
     async def disconnect(self, close_code):
@@ -43,10 +51,16 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
+        if(self.username_group == ""):
+            return
+        await self.channel_layer.group_discard(
+            self.username_group,
+            self.channel_name
+        )
 
     async def createPopMessage(self, text_data_json):
         print("createPopMessage")
-        popMessage = AppMsg(text_data_json['message'], 0)
+        popMessage = AppMsg(text_data_json['message'], 0, self.id)
         self.msgManager.addMsg(popMessage)
         print(str(popMessage))
         # Send message to room group
@@ -59,11 +73,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
     async def upvoteMessage(self, text_data_json):
-        self.msgManager.upvoteMsg(text_data_json['id'])
+        self.msgManager.upvoteMsg(text_data_json['id'], self.id)
         # self.msgManager.debugPrint()
         pass
 
-    async def refreshMessage(self, text_data_json):
+    async def refreshMessage(self):
+        if(self.username_group == ""):
+            return
+
         print("refresh message" + self.username_group)
         print(self.username_group)
         await self.channel_layer.group_send(
@@ -97,7 +114,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         # await login(self.scope, User(123123))
         # await database_sync_to_async(self.scope["session"].save)()
-        # print(self.scope)
+        print(text_data)
         text_data_json = json.loads(text_data)
         print('recieve')
         if 'message' in text_data_json:
@@ -105,7 +122,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         if 'upvote' in text_data_json:
             await self.upvoteMessage(text_data_json)
         if 'refresh' in text_data_json:
-            await self.refreshMessage(text_data_json)
+            print("wtf is happening")
+            await self.refreshMessage()
 
     # Receive  message from room group
     async def chat_message(self, event):
